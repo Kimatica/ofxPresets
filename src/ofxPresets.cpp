@@ -19,7 +19,7 @@ void ofxPresets::setup(string name_, int numPresets_, float x_, float y_){
     // allocate memory for the presets
     presets.clear();
     for(int i = 0; i < numPresets; i++){
-        presets.push_back( new ofXml() );
+        presets.push_back( new ofxXmlPoco() );
     }
     
     // default active index
@@ -89,7 +89,7 @@ void ofxPresets::onTogglePressed(bool & value){
         gui.setPosition(gui.getPosition());
         
         // load parameters from the current active preset
-        presets[activeIndex]->deserialize( *parameters );
+        ofDeserialize(*presets[activeIndex], *parameters);
     }
 }
 
@@ -119,7 +119,7 @@ void ofxPresets::setPreset(int index){
     activeIndex = index;
     
     // apply preset
-    presets[activeIndex]->deserialize(*parameters);
+    ofDeserialize(*presets[activeIndex], *parameters);
     // update gui
     updateGuiColor();
 }
@@ -146,7 +146,7 @@ void ofxPresets::setPrevPreset() {
 //--------------------------------------------------------------
 void ofxPresets::onSavePresetPressed(){
     presets[activeIndex]->clear();
-    presets[activeIndex]->serialize(*parameters);
+    ofSerialize(*presets[activeIndex], *parameters);
 }
 
 
@@ -154,7 +154,7 @@ void ofxPresets::onSavePresetPressed(){
 void ofxPresets::save(){
     // save the settings stored in the active preset
     presets[activeIndex]->clear();
-    presets[activeIndex]->serialize(*parameters);
+    ofSerialize(*presets[activeIndex], *parameters);
     
     // save the xml settings
     string root = "settings/presets-" + name + "/";
@@ -174,7 +174,7 @@ void ofxPresets::load(){
     }
     
     // apply the settings stored in the active preset
-    presets[activeIndex]->deserialize(*parameters);
+    ofDeserialize(*presets[activeIndex], *parameters);
     
     //    gui.getControl(activeIndex)->getParameter().cast<bool>().set( true ); // don't work
     toggles.getBool(activeIndex) = true;

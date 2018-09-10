@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "ofParameter.h"
 #include "ofxGui.h"
+#include "ofxXmlPoco.h"
 
 
 class ofxPresets {
@@ -49,7 +50,7 @@ private:
     
     ofParameterGroup* parameters;  // this group holds all parameters to create presets
     
-    vector<ofXml*> presets;  // each xml stores the preset
+    vector<ofxXmlPoco*> presets;  // each xml stores the preset
     
     //gui
     ofParameterGroup toggles;
