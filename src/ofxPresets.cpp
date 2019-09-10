@@ -66,7 +66,7 @@ void ofxPresets::onTogglePressed(bool & value){
         return;
     }
     
-    int prevActiveIndex = activeIndex;
+    prevActiveIndex = activeIndex;
     
     // hacky way to find which toggle has changed
     // we need to do this because the group listener
@@ -89,7 +89,9 @@ void ofxPresets::onTogglePressed(bool & value){
         gui.setPosition(gui.getPosition());
         
         // load parameters from the current active preset
-        ofDeserialize(*presets[activeIndex], *parameters);
+        //ofDeserialize(*presets[activeIndex], *parameters);
+		
+		startTransition();
     }
 }
 
@@ -119,8 +121,11 @@ void ofxPresets::setPreset(int index){
     activeIndex = index;
     
     // apply preset
-    ofDeserialize(*presets[activeIndex], *parameters);
-    // update gui
+    //ofDeserialize(*presets[activeIndex], *parameters);
+    
+	startTransition();
+	
+	// update gui
     updateGuiColor();
 }
 
@@ -209,4 +214,82 @@ void ofxPresets::setName(string name_){
 //--------------------------------------------------------------
 string ofxPresets::getName(){
     return gui.getName();
+}
+
+
+
+
+void ofxPresets::startTransition() {
+	endTransition();
+
+	presetSrc = presets[prevActiveIndex];
+	presetDst = presets[activeIndex];
+
+	pct = 0;
+
+	ofAddListener(ofEvents().update, this, &ofxPresets::updateTransition);
+}
+
+
+void ofxPresets::endTransition() {
+	ofRemoveListener(ofEvents().update, this, &ofxPresets::updateTransition);
+}
+
+
+void ofxPresets::updateTransition(ofEventArgs& arg) {
+	pct += 0.01;
+	
+	if (pct >= 1.0) {
+		pct = 1.0;
+		endTransition();
+	}
+
+	setValues(*parameters, *presetSrc, *presetDst, pct);
+}
+
+
+void ofxPresets::setValues(ofAbstractParameter& parameter, ofxXmlPoco& src, ofxXmlPoco& dst, float pct) {
+	string name = parameter.getEscapedName();
+	if (parameter.type() == typeid(ofParameterGroup).name()) {
+		ofParameterGroup & group = static_cast <ofParameterGroup &>(parameter);
+		if (const_cast<ofxXmlPoco&>(src).setTo(name) &&
+			const_cast<ofxXmlPoco&>(dst).setTo(name)) {
+			for (auto & p : group) {
+				setValues(*p, src, dst, pct);
+			}
+			const_cast<ofxXmlPoco&>(src).setToParent();
+			const_cast<ofxXmlPoco&>(dst).setToParent();
+		}
+	} else {
+		if (parameter.type() == typeid(ofParameter <int>).name()) {
+			/*int srcVal = src.getIntValue(name);
+			int dstVal = dst.getIntValue(name);
+			parameter.cast <int>() = srcVal + float(dstVal - srcVal) * pct;*/
+			parameter.cast <int>() = dst.getIntValue(name);
+		}
+		else if (parameter.type() == typeid(ofParameter <float>).name()) {
+
+			if (parameter.getEscapedName() == "deform_scale"
+				|| parameter.getEscapedName() == "spikes_scale"
+				|| parameter.getEscapedName() == "noise_weight"
+				|| parameter.getEscapedName() == "wave_weight"
+				|| parameter.getEscapedName() == "opacity") {
+				float srcVal = src.getFloatValue(name);
+				float dstVal = dst.getFloatValue(name);
+				parameter.cast <float>() = srcVal + (dstVal - srcVal) * pct;
+			}
+			else {
+				float dstVal = dst.getFloatValue(name);
+				parameter.cast <float>() = dstVal;
+			}
+			
+			
+		}
+		else if (parameter.type() == typeid(ofParameter <bool>).name()) {
+			parameter.cast <bool>() = dst.getBoolValue(name);
+		}
+		else {
+			// parameter not interpolable
+		}
+	}
 }

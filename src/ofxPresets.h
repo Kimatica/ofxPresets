@@ -40,6 +40,8 @@ public:
     ofxPanel* getPanel() { return &gui; }
     
     int getNumPresets(){ return numPresets; }
+
+	
     
     
 private:
@@ -49,7 +51,7 @@ private:
     int numPresets;
     
     ofParameterGroup* parameters;  // this group holds all parameters to create presets
-    
+
     vector<ofxXmlPoco*> presets;  // each xml stores the preset
     
     //gui
@@ -62,4 +64,16 @@ private:
     
     
     void updateGuiColor();
+
+	// linear interpolation between presets
+	ofxXmlPoco* presetSrc;
+	ofxXmlPoco* presetDst;
+	void setValues (ofAbstractParameter & parameter, ofxXmlPoco & src, ofxXmlPoco & dst, float pct);
+	void startTransition();
+	void endTransition();
+	void updateTransition(ofEventArgs& arg);
+
+	int prevActiveIndex;
+
+	float pct;
 };
