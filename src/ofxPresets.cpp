@@ -117,7 +117,7 @@ void ofxPresets::setPreset(int index){
         return;
     }
     
-    int prevActiveIndex = activeIndex;
+    prevActiveIndex = activeIndex;
     activeIndex = index;
     
     // apply preset
