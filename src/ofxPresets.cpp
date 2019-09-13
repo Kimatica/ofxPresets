@@ -237,7 +237,8 @@ void ofxPresets::endTransition() {
 
 
 void ofxPresets::updateTransition(ofEventArgs& arg) {
-	pct += 0.01;
+	//pct += 0.0333; // transition will last 1 sec
+	pct += 0.0222; // transition will last 1.5 sec
 	
 	if (pct >= 1.0) {
 		pct = 1.0;
