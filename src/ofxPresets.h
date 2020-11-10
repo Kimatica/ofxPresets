@@ -1,65 +1,50 @@
-
 #pragma once
-
 #include "ofMain.h"
 #include "ofParameter.h"
 #include "ofxGui.h"
-#include "ofxXmlPoco.h"
-
 
 class ofxPresets {
     
 public:
     
-    ofxPresets();
-    
     void setup(string name, int numPresets, float x = 10, float y = 10);
-    void setParameters(ofParameterGroup * group);
     
-    void save(); // persist presets to the hard drive
-    void load(); // load presets from the hard drive
+    void setParameters(ofParameterGroup* group) { parameters = group; }
     
-    void draw();
+    void save(); //< persist presets to hard drive
+    void load(); //< load presets from hard drive
     
-    // change active index without clicking on gui
-    void setPreset(int index);
-    void setNextPreset();
-    void setPrevPreset();
+    void applyPreset(int index);
+    void applyNextPreset();
+    void applyPrevPreset();
     
-    int getActiveIndex() { return activeIndex; }
+    // -- panel
     
-    // wraps ofxBaseGui functionallity:
+    void draw() { gui.draw(); }
     
-    void setPosition(ofPoint pos);
-    void setPosition(float x, float y);
-    void setName(string name);
+    void setPosition(ofPoint pos) { gui.setPosition(pos); }
+    void setPosition(float x, float y) { gui.setPosition(x,y); }
     
-    string getName();
-    ofPoint getPosition();
-    
+    string getName() { return gui.getName(); }
+    ofPoint getPosition() { return gui.getPosition(); }
     ofxPanel* getPanel() { return &gui; }
-    
-    int getNumPresets(){ return numPresets; }
-    
     
 private:
     
     string name;
-    int activeIndex;
     int numPresets;
+    int activeIndex;
     
-    ofParameterGroup* parameters;  // this group holds all parameters to create presets
+    ofParameterGroup* parameters;
+    vector<ofXml*> presets;
     
-    vector<ofxXmlPoco*> presets;  // each xml stores the preset
+    void savePreset();
     
-    //gui
-    ofParameterGroup toggles;
+    // panel
+    
     ofxPanel gui;
-    void onTogglePressed(bool & value);  // listener for changes in gui
-    
+    ofParameterGroup toggles;
     ofxButton saveButton;
-    void onSavePresetPressed();
     
-    
-    void updateGuiColor();
+    void onToggleChange(ofAbstractParameter& parameter);
 };
