@@ -11,23 +11,26 @@ public:
     
     void setParameters(ofParameterGroup* group) { parameters = group; }
     
-    void save(); //< persist presets to hard drive
-    void load(); //< load presets from hard drive
+    void set(int index);
+    void setNext();
+    void setPrev();
     
-    void applyPreset(int index);
-    void applyNextPreset();
-    void applyPrevPreset();
+    void saveCurrent();
+    void clearCurrent();
     
-    // -- panel
+    void moveCurrentUp();
+    void moveCurrentDown();
+    
+    void saveToDisk();
+    void loadFromDisk(); //< load presets from hard drive
+    
+    // panel
     
     void draw() { gui.draw(); }
-    
-    void setPosition(ofPoint pos) { gui.setPosition(pos); }
     void setPosition(float x, float y) { gui.setPosition(x,y); }
-    
-    string getName() { return gui.getName(); }
     ofPoint getPosition() { return gui.getPosition(); }
-    ofxPanel* getPanel() { return &gui; }
+    ofxPanel& getPanel() { return gui; }
+    ofParameterGroup& getTogglesGroup() { return toggles; } // osc control
     
 private:
     
@@ -38,13 +41,15 @@ private:
     ofParameterGroup* parameters;
     vector<ofXml*> presets;
     
-    void savePreset();
+    bool isEmpty(int index);
     
     // panel
     
     ofxPanel gui;
     ofParameterGroup toggles;
-    ofxButton saveButton;
-    
-    void onToggleChange(ofAbstractParameter& parameter);
+    ofParameter<void> saveButton;
+    ofParameter<void> clearButton;
+
+    void onToggleClick(ofAbstractParameter& parameter);
+    void updateGuiColor();
 };
