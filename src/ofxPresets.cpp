@@ -90,9 +90,14 @@ void ofxPresets::save()
     
     // persist all to hard drive
     string root = "settings/presets-" + name + "/";
+
+    ofDirectory dir(root);
+    if (!dir.exists())
+        dir.create(true);
+
     for(int i = 0; i < numPresets; i++){
         string fileName = "preset-" + ofToString(i) + ".xml";
-        presets[i]->save(root + fileName);
+        bool ok = presets[i]->save(root + fileName);
     }
 }
 
