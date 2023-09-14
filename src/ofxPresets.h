@@ -18,8 +18,8 @@ public:
     void saveCurrent();
     void clearCurrent();
     
-    void moveCurrentUp();
-    void moveCurrentDown();
+    //void moveCurrentUp();
+    //void moveCurrentDown();
     
     void saveToDisk();
     void loadFromDisk(); //< load presets from hard drive

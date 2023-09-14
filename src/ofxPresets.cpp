@@ -138,7 +138,7 @@ void ofxPresets::loadFromDisk()
 void ofxPresets::updateGuiColor()
 {
     string groupName = gui.getControlNames()[0];
-    ofxGuiGroup guiGroup = gui.getGroup(groupName);
+    ofxGuiGroup& guiGroup = gui.getGroup(groupName);
     for (int i = 0; i < numPresets; i++) {
         ofColor color = isEmpty(i) ? ofColor(0) : ofColor(60);
         guiGroup.getControl(i)->setBackgroundColor(color);
