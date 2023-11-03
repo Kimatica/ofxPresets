@@ -34,6 +34,14 @@ void ofxPresets::setup(string name, int numPresets, float x, float y)
     clearButton.set("<-- clear preset");
     clearButton.addListener(this, &ofxPresets::clearCurrent);
     gui.add(clearButton);
+
+    saveToDiskButton.set("<-- save to disk");
+    saveToDiskButton.addListener(this, &ofxPresets::saveToDisk);
+    gui.add(saveToDiskButton);
+
+    loadFromDiskButton.set("<-- load from disk");
+    loadFromDiskButton.addListener(this, &ofxPresets::loadFromDisk);
+    gui.add(loadFromDiskButton);
 }
 
 

@@ -22,7 +22,7 @@ public:
     //void moveCurrentDown();
     
     void saveToDisk();
-    void loadFromDisk(); //< load presets from hard drive
+    void loadFromDisk();
     
     // panel
     
@@ -51,6 +51,8 @@ private:
     ofParameterGroup toggles;
     ofParameter<void> saveButton;
     ofParameter<void> clearButton;
+    ofParameter<void> saveToDiskButton;
+    ofParameter<void> loadFromDiskButton;
 
     void onToggleChange(ofAbstractParameter& parameter);
     void updateGuiColor();
