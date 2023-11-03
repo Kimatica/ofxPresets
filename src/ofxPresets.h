@@ -31,6 +31,7 @@ public:
     ofPoint getPosition() { return gui.getPosition(); }
     float getWidth() { return gui.getWidth(); }
     float getHeight() { return gui.getHeight(); }
+    ofRectangle getShape() { return gui.getShape(); }
     ofxPanel& getPanel() { return gui; }
     ofParameterGroup& getTogglesGroup() { return toggles; } // osc control
     
