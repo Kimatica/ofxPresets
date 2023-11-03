@@ -19,7 +19,7 @@ void ofxPresets::setup(string name, int numPresets, float x, float y)
         ofParameter<bool> toggle;
         toggles.add(toggle.set(ofToString(i), false));
     }
-    ofAddListener(toggles.parameterChangedE(), this, &ofxPresets::onToggleClick);
+    ofAddListener(toggles.parameterChangedE(), this, &ofxPresets::onToggleChange);
     
     gui.clear();
     gui.setHeaderBackgroundColor(ofColor::chocolate);
@@ -39,7 +39,7 @@ void ofxPresets::setup(string name, int numPresets, float x, float y)
 
 // TODO: change name to onToggleChange
 // this callback is triggered on parameter change (click or osc)
-void ofxPresets::onToggleClick(ofAbstractParameter& p)
+void ofxPresets::onToggleChange(ofAbstractParameter& p)
 {
     auto& clicked = p.cast<bool>();
     bool value = clicked.get();

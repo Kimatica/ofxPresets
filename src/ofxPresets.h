@@ -29,6 +29,8 @@ public:
     void draw() { gui.draw(); }
     void setPosition(float x, float y) { gui.setPosition(x,y); }
     ofPoint getPosition() { return gui.getPosition(); }
+    float getWidth() { return gui.getWidth(); }
+    float getHeight() { return gui.getHeight(); }
     ofxPanel& getPanel() { return gui; }
     ofParameterGroup& getTogglesGroup() { return toggles; } // osc control
     
@@ -50,6 +52,6 @@ private:
     ofParameter<void> saveButton;
     ofParameter<void> clearButton;
 
-    void onToggleClick(ofAbstractParameter& parameter);
+    void onToggleChange(ofAbstractParameter& parameter);
     void updateGuiColor();
 };
